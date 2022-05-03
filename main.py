@@ -1,3 +1,8 @@
+'''
+You don't understand that, because I'm actually noob and I don't understand how work this framework "kivy".
+So if you want it, you can't tell me about non-correct using products of the framework <3
+'''
+
 from kivy.app import App
 
 from kivy.uix.button import Button
