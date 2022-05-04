@@ -10,11 +10,15 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 
 from kivy.uix.modalview import ModalView
+from CustomModules import CustomGraphics
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
+
+from kivy.uix.scrollview import ScrollView
+from kivy.core.window import Window
 
 
 class MyApp(App):
@@ -40,12 +44,10 @@ class MyApp(App):
 
                 file.write(new_line)
 
-
-
         def btn_delete_pressed(instrance):
-            delete_fl = FloatLayout(size_hint=(1, 1))
+            delete_fl = FloatLayout()
 
-            delete_fl.add_widget( ModalView(background_color=[.2, .2, .2, .75]) )
+            delete_fl.add_widget(ModalView(background_color=[.2, .2, .2, .75], ))
 
             new_fl = FloatLayout(size_hint=(.6, .5), pos_hint={'x':.2, 'y':.4})
 
@@ -89,8 +91,6 @@ class MyApp(App):
 
             my_file.close()
 
-
-
         def btn1_pressed(instance):
             self.textinput = TextInput(text='Название продукта-Дата',
                                        multiline=True, focus=False , font_size = 30)
@@ -102,7 +102,10 @@ class MyApp(App):
 
         def btn2_pressed(instrance):
             bl.clear_widgets()
-            gl = GridLayout(cols=2)
+            gl = GridLayout(cols=2, size_hint_y=None, spacing=5)
+            gl.bind(minimum_height=gl.setter('height'))
+            scrollBar = ScrollView(size_hint=(1, 1), size=(Window.width, Window.height))
+            scrollBar.add_widget(gl)
 
             try:
                 my_file = open('files.txt', 'r')
@@ -117,40 +120,40 @@ class MyApp(App):
                 s.sort(key=lambda list: int(list[0][2][-2:] + list[0][1] + list[0][0]))
                 self.product_list = s
 
-                count = 0
                 for k in s:
-                    if count < 6:
-                        gl.add_widget(Label(text=k[1], font_size = 30))
+                    lb = Label( text=k[1], font_size = 30, size_hint_y=None )
+                    CustomGraphics.SetBG(lb, bg_color=[.22,.22,.33, 1])
+                    gl.add_widget(lb)
 
-                        al = AnchorLayout(anchor_x='right', anchor_y='top')
-                        al.add_widget(Label(text=k[0][0] + '.' + k[0][1] + '.' + k[0][2], font_size = 30))
-                        al.add_widget(
-                            Button(
-                                text='X', font_size=26,
-                                on_press=btn_delete_pressed,
-                                size_hint=(0.2, 0.4), pos_hint={'x':.8, 'y':.6}
-                            )
+                    al = AnchorLayout(anchor_x='right', anchor_y='top', size_hint_y=None)
+                    al.add_widget(Label( text=k[0][0] + '.' + k[0][1] + '.' + k[0][2], font_size = 30 ))
+                    al.add_widget(
+                        Button(
+                            text='X', font_size=26,
+                            on_press=btn_delete_pressed,
+                            size_hint=(None, 0.45), pos_hint={'x':.8, 'y':.6},
+                            size=[65, 0], background_color=(.47,.47,.68, 1)
                         )
-
-                        gl.add_widget(al)
-                        count +=1
-                    else: break
+                    )
+                    CustomGraphics.SetBG(al, bg_color=[.22,.22,.33, 1])
+                    gl.add_widget(al)
 
             except FileNotFoundError:
                 bl.add_widget(Label(text='Извините, файл не открывается или не создан.'))
 
-            bl.add_widget(gl)
+            bl.add_widget(scrollBar)
             bl.add_widget(btn_exit)
 
-
         bl = BoxLayout(orientation='vertical')
-        big_al = AnchorLayout(anchor_x='center', anchor_y='center')
+        big_al = AnchorLayout(anchor_x='center', anchor_y='center', )
 
-        btn1 = Button(text='Добавить Продукт', font_size = 30)
-        btn2 = Button(text='Расписание порчи продуктов', font_size = 30)
+        btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(.47,.47,.68, 1))
+        btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(.47,.47,.68, 1))
 
-        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3))
-        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3))
+        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(.47,.47,.68, 1))
+        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(.47,.47,.68, 1))
+
+        Window.clearcolor =(.2,.2,.2,1)
 
         btn1.bind(on_press=btn1_pressed)
         btn2.bind(on_press=btn2_pressed)
