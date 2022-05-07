@@ -24,27 +24,50 @@ class MyApp(App):
 
     def build(self):
 #______________________________________Color_Settings___________________________________________________________________
-        color_set_file = open('color_settings.txt', 'r+')
+        try:
+            color_set_file = open('color_settings.txt', 'r+')
 
-        color_list = ''
+            color_list = ''
 
-        for line in color_set_file:
-            color_list += line
+            for line in color_set_file:
+                color_list += line
 
-        color_list = color_list.split('$')
+            color_list = color_list.split('$')
 
-        for i in range(len(color_list)):
-            color_list[i] = color_list[i].split('\n')
-            for k in range(1, len(color_list[i])):
-                color_list[i][k] = color_list[i][k].split(':')
-                try:
-                    color_list[i][k][1] = color_list[i][k][1].split(',')
-                    for j in range(len(color_list[i][k][1])):
-                        color_list[i][k][1][j] = float(color_list[i][k][1][j])
-                except ValueError:
-                    continue
-                except IndexError:
-                    continue
+            for i in range(len(color_list)):
+                color_list[i] = color_list[i].split('\n')
+                for k in range(1, len(color_list[i])):
+                    color_list[i][k] = color_list[i][k].split(':')
+                    try:
+                        color_list[i][k][1] = color_list[i][k][1].split(',')
+                        for j in range(len(color_list[i][k][1])):
+                            color_list[i][k][1][j] = float(color_list[i][k][1][j])
+                    except ValueError:
+                        continue
+                    except IndexError:
+                        continue
+        except FileNotFoundError:
+            color_list = open('color_settings.txt', 'a+')
+
+            color_list.write('default_color_day:' + '\n')
+            color_list.write('    btn1: .47,.47,.68, 1' + '\n')
+            color_list.write('    btn2: .47,.47,.68, 1' + '\n')
+            color_list.write('    btn_exit: .47,.47,.68, 1' + '\n')
+
+            color_list.write('    btn_add: .47,.47,.68, 1' + '\n')
+            color_list.write('    window: .2,.2,.2,1' + '\n')
+            color_list.write('    gridlayout: .22,.22,.33, 1' + '\n')
+            color_list.write('    btn_delete: .47,.47,.68, 1' + '\n')
+
+            color_list.write('$default_color_night:' + '\n')
+            color_list.write('    btn1:' + '\n')
+            color_list.write('    btn2:' + '\n')
+            color_list.write('    btn_exit:' + '\n')
+
+            color_list.write('    btn_add:' + '\n')
+            color_list.write('    window:' + '\n')
+            color_list.write('    gridlayout:' + '\n')
+            color_list.write('    btn_delete:' + '\n')
 
         print(color_list)
 
