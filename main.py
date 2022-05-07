@@ -20,10 +20,53 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 
-
 class MyApp(App):
 
     def build(self):
+#______________________________________Color_Settings___________________________________________________________________
+        color_set_file = open('color_settings.txt', 'r+')
+
+        color_list = ''
+
+        for line in color_set_file:
+            color_list += line
+
+        color_list = color_list.split('$')
+
+        for i in range(len(color_list)):
+            color_list[i] = color_list[i].split('\n')
+            for k in range(1, len(color_list[i])):
+                color_list[i][k] = color_list[i][k].split(':')
+                try:
+                    color_list[i][k][1] = color_list[i][k][1].split(',')
+                    for j in range(len(color_list[i][k][1])):
+                        color_list[i][k][1][j] = float(color_list[i][k][1][j])
+                except ValueError:
+                    continue
+                except IndexError:
+                    continue
+
+        print(color_list)
+
+        btn1_color = color_list[0][1][1]
+        btn2_color = color_list[0][2][1]
+        btn_exit_color = color_list[0][3][1]
+        btn_add_color = color_list[0][4][1]
+        window_color = color_list[0][5][1]
+        gridlayout_color = color_list[0][6][1]
+        btn_delete_color = color_list[0][7][1]
+
+        print(
+            btn1_color,
+            btn2_color,
+            btn_exit_color,
+            btn_add_color,
+            window_color,
+            gridlayout_color,
+            btn_delete_color,
+            sep = ' |'
+        )
+#______________________________________Color_Settings___________________________________________________________________
 
         def deleting(instrance):
             product_name = self.delete_input.text
@@ -108,7 +151,7 @@ class MyApp(App):
             scrollBar.add_widget(gl)
 
             try:
-                my_file = open('files.txt', 'r')
+                my_file = open('files.txt', 'r+')
                 s = []
 
                 for line in my_file:
@@ -122,7 +165,7 @@ class MyApp(App):
 
                 for k in s:
                     lb = Label( text=k[1], font_size = 30, size_hint_y=None )
-                    CustomGraphics.SetBG(lb, bg_color=[.22,.22,.33, 1])
+                    CustomGraphics.SetBG(lb, bg_color=[gridlayout_color[0], gridlayout_color[1], gridlayout_color[2], gridlayout_color[3]])
                     gl.add_widget(lb)
 
                     al = AnchorLayout(anchor_x='right', anchor_y='top', size_hint_y=None)
@@ -132,10 +175,11 @@ class MyApp(App):
                             text='X', font_size=26,
                             on_press=btn_delete_pressed,
                             size_hint=(None, 0.45), pos_hint={'x':.8, 'y':.6},
-                            size=[65, 0], background_color=(.47,.47,.68, 1)
+                            size=[65, 0], background_color=(btn_delete_color[0], btn_delete_color[1], btn_delete_color[2], btn_delete_color[3]),
+                            opacity = 20,
                         )
                     )
-                    CustomGraphics.SetBG(al, bg_color=[.22,.22,.33, 1])
+                    CustomGraphics.SetBG(al, bg_color=[gridlayout_color[0], gridlayout_color[1], gridlayout_color[2], gridlayout_color[3]])
                     gl.add_widget(al)
 
             except FileNotFoundError:
@@ -144,16 +188,16 @@ class MyApp(App):
             bl.add_widget(scrollBar)
             bl.add_widget(btn_exit)
 
-        bl = BoxLayout(orientation='vertical')
+        bl = BoxLayout(orientation='vertical', spacing=5, padding=5)
         big_al = AnchorLayout(anchor_x='center', anchor_y='center', )
 
-        btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(.47,.47,.68, 1))
-        btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(.47,.47,.68, 1))
+        btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(btn1_color[0], btn1_color[1], btn1_color[2], btn1_color[3]))
+        btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(btn2_color[0], btn2_color[1], btn2_color[2], btn2_color[3]))
 
-        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(.47,.47,.68, 1))
-        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(.47,.47,.68, 1))
+        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(btn_exit_color[0], btn_exit_color[1], btn_exit_color[2], btn_exit_color[3]))
+        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(btn_add_color[0], btn_add_color[1], btn_add_color[2], btn_add_color[3]))
 
-        Window.clearcolor =(.2,.2,.2,1)
+        Window.clearcolor =(window_color[0], window_color[1], window_color[2], window_color[3])
 
         btn1.bind(on_press=btn1_pressed)
         btn2.bind(on_press=btn2_pressed)
