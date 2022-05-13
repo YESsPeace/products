@@ -23,6 +23,10 @@ from kivy.core.window import Window
 class MyApp(App):
 
     def build(self):
+
+        def btn_settings_pressed(instrance):
+            pass
+
 #______________________________________Color_Settings___________________________________________________________________
         try:
             color_set_file = open('color_settings.txt', 'r+')
@@ -46,6 +50,7 @@ class MyApp(App):
                         continue
                     except IndexError:
                         continue
+            color_set_file.close()
         except FileNotFoundError:
             color_list = open('color_settings.txt', 'a+')
 
@@ -69,7 +74,28 @@ class MyApp(App):
             color_list.write('    gridlayout:' + '\n')
             color_list.write('    btn_delete:' + '\n')
 
-        print(color_list)
+        color_set_file = open('color_settings.txt', 'r+')
+
+        color_list = ''
+
+        for line in color_set_file:
+            color_list += line
+
+        color_list = color_list.split('$')
+
+        for i in range(len(color_list)):
+            color_list[i] = color_list[i].split('\n')
+            for k in range(1, len(color_list[i])):
+                color_list[i][k] = color_list[i][k].split(':')
+                try:
+                    color_list[i][k][1] = color_list[i][k][1].split(',')
+                    for j in range(len(color_list[i][k][1])):
+                        color_list[i][k][1][j] = float(color_list[i][k][1][j])
+                except ValueError:
+                    continue
+                except IndexError:
+                    continue
+        color_set_file.close()
 
         btn1_color = color_list[0][1][1]
         btn2_color = color_list[0][2][1]
@@ -78,26 +104,21 @@ class MyApp(App):
         window_color = color_list[0][5][1]
         gridlayout_color = color_list[0][6][1]
         btn_delete_color = color_list[0][7][1]
-
-        print(
-            btn1_color,
-            btn2_color,
-            btn_exit_color,
-            btn_add_color,
-            window_color,
-            gridlayout_color,
-            btn_delete_color,
-            sep = ' |'
-        )
 #______________________________________Color_Settings___________________________________________________________________
 
         def deleting(instrance):
             product_name = self.delete_input.text
+            print(product_name)
+            print(self.product_list)
 
             for i in range(len(self.product_list)):
-                if str(product_name).lower() + '\n' == str(self.product_list[i][1]).lower():
-                    del self.product_list[i]
-                print(self.product_list)
+                try:
+                    if str(product_name).lower() + '\n' == str(self.product_list[i][1]).lower():
+                        del self.product_list[i]
+                        print(self.product_list)
+                except IndexError:
+                    print(self.product_list)
+                    continue
 
             file = open('files.txt', 'w')
             file.write('')
@@ -143,6 +164,7 @@ class MyApp(App):
             big_al.clear_widgets()
             big_al.add_widget(bl)
             bl.clear_widgets()
+            bl.add_widget(fl_al)
             bl.add_widget(btn1)
             bl.add_widget(btn2)
 
@@ -213,12 +235,15 @@ class MyApp(App):
 
         bl = BoxLayout(orientation='vertical', spacing=5, padding=5)
         big_al = AnchorLayout(anchor_x='center', anchor_y='center', )
+        fl_al = FloatLayout(size_hint=(1, .3))
 
         btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(btn1_color[0], btn1_color[1], btn1_color[2], btn1_color[3]))
         btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(btn2_color[0], btn2_color[1], btn2_color[2], btn2_color[3]))
 
         btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(btn_exit_color[0], btn_exit_color[1], btn_exit_color[2], btn_exit_color[3]))
         btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(btn_add_color[0], btn_add_color[1], btn_add_color[2], btn_add_color[3]))
+
+        btn_settings = Button( text='Настройки', font_size = 30, background_color=(btn1_color[0], btn1_color[1], btn1_color[2], btn1_color[3]), on_press=btn_settings_pressed, size_hint=(0.3, 1), pos_hint={'x':.0, 'y':.0} )
 
         Window.clearcolor =(window_color[0], window_color[1], window_color[2], window_color[3])
 
@@ -228,8 +253,11 @@ class MyApp(App):
         btn_add.bind(on_press=adding)
         btn_exit.bind(on_press=btn_exit_pressed)
 
+        bl.add_widget(fl_al)
         bl.add_widget(btn1)
         bl.add_widget(btn2)
+
+        fl_al.add_widget(btn_settings)
 
         big_al.add_widget(bl)
 
