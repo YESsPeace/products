@@ -55,14 +55,14 @@ class MyApp(App):
             color_list = open('color_settings.txt', 'a+')
 
             color_list.write('default_color_day:' + '\n')
-            color_list.write('    btn1: .47,.47,.68, 1' + '\n')
-            color_list.write('    btn2: .47,.47,.68, 1' + '\n')
-            color_list.write('    btn_exit: .47,.47,.68, 1' + '\n')
+            color_list.write('    btn1: .243137255, .478431373, .807843137, 1' + '\n')
+            color_list.write('    btn2: .243137255, .478431373, .807843137, 1' + '\n')
+            color_list.write('    btn_exit: .243137255, .478431373, .807843137, 1' + '\n')
 
-            color_list.write('    btn_add: .47,.47,.68, 1' + '\n')
-            color_list.write('    window: .2,.2,.2,1' + '\n')
-            color_list.write('    gridlayout: .22,.22,.33, 1' + '\n')
-            color_list.write('    btn_delete: .47,.47,.68, 1' + '\n')
+            color_list.write('    btn_add: .243137255, .478431373, .807843137, 1' + '\n')
+            color_list.write('    window: .2, .2, .2, 1' + '\n')
+            color_list.write('    gridlayout: .443137255, .854901961, .6, .4' + '\n')
+            color_list.write('    btn_delete: .243137255, .478431373, .807843137, .3' + '\n')
 
             color_list.write('$default_color_night:' + '\n')
             color_list.write('    btn1:' + '\n')
