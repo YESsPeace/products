@@ -107,13 +107,14 @@ class MyApp(App):
 #______________________________________Color_Settings___________________________________________________________________
 
         def deleting(instrance):
-            product_name = self.delete_input.text
+
+            product_name = s[int(str(btn_delete_text)[-2])][1]
             print(product_name)
             print(self.product_list)
 
             for i in range(len(self.product_list)):
                 try:
-                    if str(product_name).lower() + '\n' == str(self.product_list[i][1]).lower():
+                    if str(product_name).lower() == str(self.product_list[i][1]).lower():
                         del self.product_list[i]
                         print(self.product_list)
                 except IndexError:
@@ -131,22 +132,26 @@ class MyApp(App):
 
                 file.write(new_line)
 
-        def btn_delete_pressed(instrance):
+        def btn_delete_pressed(instance):
+            print(s)
+            global delete_fl, btn_delete_text
+
+            btn_delete_text = instance.text
+            print(btn_delete_text)
+
             delete_fl = FloatLayout()
 
             delete_fl.add_widget(ModalView(background_color=[.2, .2, .2, .75], ))
 
             new_fl = FloatLayout(size_hint=(.6, .5), pos_hint={'x':.2, 'y':.4})
 
-            self.delete_input = TextInput(text='Впишите продукт, который хотите удалить',
-                                       multiline=True, font_size = 30,
-                                     size_hint=(1, 1), pos_hint={'x':0, 'y':0})
-            new_fl.add_widget(self.delete_input)
+
+            new_fl.add_widget( Label(text='Подтвердите', font_size=30) )
 
             new_fl.add_widget(
                 Button( text='Выйти',
                     size_hint=(0.5, 0.2), pos_hint={'x':.5, 'y':.0},
-                    on_press=btn_exit_pressed, font_size = 24
+                    on_press= btn_exit_moadl_view_pressed, font_size = 24
                 )
             )
 
@@ -159,6 +164,10 @@ class MyApp(App):
 
             delete_fl.add_widget(new_fl)
             big_al.add_widget(delete_fl)
+
+        def btn_exit_moadl_view_pressed(instrance):
+            big_al.remove_widget(delete_fl)
+
 
         def btn_exit_pressed(instrance):
             big_al.clear_widgets()
@@ -189,6 +198,8 @@ class MyApp(App):
             bl.add_widget(btn_exit)
 
         def btn2_pressed(instrance):
+            global s
+
             bl.clear_widgets()
             gl = GridLayout(cols=2, size_hint_y=None, spacing=5)
             gl.bind(minimum_height=gl.setter('height'))
@@ -208,8 +219,9 @@ class MyApp(App):
                 s.sort(key=lambda list: int(list[0][2][-2:] + list[0][1] + list[0][0]))
                 self.product_list = s
 
+                idintif = 0
                 for k in s:
-                    lb = Label( text=k[1], font_size = 30, size_hint_y=None )
+                    lb = Label( text=k[1][:-1], font_size = 30, size_hint_y=None )
                     CustomGraphics.SetBG(lb, bg_color=[gridlayout_color[0], gridlayout_color[1], gridlayout_color[2], gridlayout_color[3]])
                     gl.add_widget(lb)
 
@@ -217,13 +229,14 @@ class MyApp(App):
                     al.add_widget(Label( text=k[0][0] + '.' + k[0][1] + '.' + k[0][2], font_size = 30 ))
                     al.add_widget(
                         Button(
-                            text='X', font_size=26,
+                            text='X' + '[' + str(idintif) + ']', font_size=26,
                             on_press=btn_delete_pressed,
                             size_hint=(None, 0.45), pos_hint={'x':.8, 'y':.6},
                             size=[65, 0], background_color=(btn_delete_color[0], btn_delete_color[1], btn_delete_color[2], btn_delete_color[3]),
-                            opacity = 20,
+                            opacity = 20
                         )
                     )
+                    idintif += 1
                     CustomGraphics.SetBG(al, bg_color=[gridlayout_color[0], gridlayout_color[1], gridlayout_color[2], gridlayout_color[3]])
                     gl.add_widget(al)
 
