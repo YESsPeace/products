@@ -55,24 +55,14 @@ class MyApp(App):
             color_list = open('color_settings.txt', 'a+')
 
             color_list.write('default_color_day:' + '\n')
-            color_list.write('    btn1: .243137255, .478431373, .807843137, 1' + '\n')
-            color_list.write('    btn2: .243137255, .478431373, .807843137, 1' + '\n')
-            color_list.write('    btn_exit: .243137255, .478431373, .807843137, 1' + '\n')
-
-            color_list.write('    btn_add: .243137255, .478431373, .807843137, 1' + '\n')
+            color_list.write('    btn: .243137255, .478431373, .807843137, 1' + '\n')
             color_list.write('    window: .2, .2, .2, 1' + '\n')
-            color_list.write('    gridlayout: .443137255, .854901961, .6, .4' + '\n')
-            color_list.write('    btn_delete: .243137255, .478431373, .807843137, .3' + '\n')
+            color_list.write('    layout: .443137255, .854901961, .6, .4' + '\n')
 
             color_list.write('$default_color_night:' + '\n')
-            color_list.write('    btn1:' + '\n')
-            color_list.write('    btn2:' + '\n')
-            color_list.write('    btn_exit:' + '\n')
-
-            color_list.write('    btn_add:' + '\n')
+            color_list.write('    btn:' + '\n')
             color_list.write('    window:' + '\n')
-            color_list.write('    gridlayout:' + '\n')
-            color_list.write('    btn_delete:' + '\n')
+            color_list.write('    layout:' + '\n')
 
         color_set_file = open('color_settings.txt', 'r+')
 
@@ -97,13 +87,9 @@ class MyApp(App):
                     continue
         color_set_file.close()
 
-        btn1_color = color_list[0][1][1]
-        btn2_color = color_list[0][2][1]
-        btn_exit_color = color_list[0][3][1]
-        btn_add_color = color_list[0][4][1]
-        window_color = color_list[0][5][1]
-        gridlayout_color = color_list[0][6][1]
-        btn_delete_color = color_list[0][7][1]
+        btn_color = color_list[0][1][1]
+        window_color = color_list[0][2][1]
+        layout_color = color_list[0][3][1]
 #______________________________________Color_Settings___________________________________________________________________
 
         def deleting(instrance):
@@ -145,8 +131,10 @@ class MyApp(App):
 
             new_fl = FloatLayout(size_hint=(.6, .5), pos_hint={'x':.2, 'y':.4})
 
-
-            new_fl.add_widget( Label(text='Подтвердите', font_size=30) )
+            accept = Label(text='Подтвердите', font_size=30, pos_hint={'x':.0, 'y':.0})
+            CustomGraphics.SetBG(accept, bg_color=[layout_color[0], layout_color[1], layout_color[2],
+                                               layout_color[3]])
+            new_fl.add_widget(accept)
 
             new_fl.add_widget(
                 Button( text='Выйти',
@@ -167,7 +155,7 @@ class MyApp(App):
 
         def btn_exit_moadl_view_pressed(instrance):
             big_al.remove_widget(delete_fl)
-
+            return btn2_pressed(instrance)
 
         def btn_exit_pressed(instrance):
             big_al.clear_widgets()
@@ -222,7 +210,7 @@ class MyApp(App):
                 idintif = 0
                 for k in s:
                     lb = Label( text=k[1][:-1], font_size = 30, size_hint_y=None )
-                    CustomGraphics.SetBG(lb, bg_color=[gridlayout_color[0], gridlayout_color[1], gridlayout_color[2], gridlayout_color[3]])
+                    CustomGraphics.SetBG(lb, bg_color=[layout_color[0], layout_color[1], layout_color[2], layout_color[3]])
                     gl.add_widget(lb)
 
                     al = AnchorLayout(anchor_x='right', anchor_y='top', size_hint_y=None)
@@ -232,12 +220,12 @@ class MyApp(App):
                             text='X' + '[' + str(idintif) + ']', font_size=26,
                             on_press=btn_delete_pressed,
                             size_hint=(None, 0.45), pos_hint={'x':.8, 'y':.6},
-                            size=[65, 0], background_color=(btn_delete_color[0], btn_delete_color[1], btn_delete_color[2], btn_delete_color[3]),
+                            size=[65, 0], background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]),
                             opacity = 20
                         )
                     )
                     idintif += 1
-                    CustomGraphics.SetBG(al, bg_color=[gridlayout_color[0], gridlayout_color[1], gridlayout_color[2], gridlayout_color[3]])
+                    CustomGraphics.SetBG(al, bg_color=[layout_color[0], layout_color[1], layout_color[2], layout_color[3]])
                     gl.add_widget(al)
 
             except FileNotFoundError:
@@ -250,13 +238,13 @@ class MyApp(App):
         big_al = AnchorLayout(anchor_x='center', anchor_y='center', )
         fl_al = FloatLayout(size_hint=(1, .3))
 
-        btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(btn1_color[0], btn1_color[1], btn1_color[2], btn1_color[3]))
-        btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(btn2_color[0], btn2_color[1], btn2_color[2], btn2_color[3]))
+        btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
+        btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
 
-        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(btn_exit_color[0], btn_exit_color[1], btn_exit_color[2], btn_exit_color[3]))
-        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(btn_add_color[0], btn_add_color[1], btn_add_color[2], btn_add_color[3]))
+        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
+        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
 
-        btn_settings = Button( text='Настройки', font_size = 30, background_color=(btn1_color[0], btn1_color[1], btn1_color[2], btn1_color[3]), on_press=btn_settings_pressed, size_hint=(0.3, 1), pos_hint={'x':.0, 'y':.0} )
+        btn_settings = Button( text='Настройки', font_size = 30, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), on_press=btn_settings_pressed, size_hint=(0.3, 1), pos_hint={'x':.0, 'y':.0} )
 
         Window.clearcolor =(window_color[0], window_color[1], window_color[2], window_color[3])
 
