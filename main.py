@@ -56,8 +56,8 @@ class MyApp(App):
 
             color_list.write('default_color_day:' + '\n')
             color_list.write('    btn: .243137255, .478431373, .807843137, 1' + '\n')
-            color_list.write('    window: .2, .2, .2, 1' + '\n')
-            color_list.write('    layout: .443137255, .854901961, .6, .4' + '\n')
+            color_list.write('    window: .2, .2, .2, .2' + '\n')
+            color_list.write('    layout: .443137255, .854901961, .6, 1' + '\n')
 
             color_list.write('$default_color_night:' + '\n')
             color_list.write('    btn:' + '\n')
@@ -131,7 +131,7 @@ class MyApp(App):
 
             new_fl = FloatLayout(size_hint=(.6, .5), pos_hint={'x':.2, 'y':.4})
 
-            accept = Label(text='Подтвердите', font_size=30, pos_hint={'x':.0, 'y':.0})
+            accept = Label(text='Подтвердите', font_size=60, pos_hint={'x':.0, 'y':.0})
             CustomGraphics.SetBG(accept, bg_color=[layout_color[0], layout_color[1], layout_color[2],
                                                layout_color[3]])
             new_fl.add_widget(accept)
@@ -139,14 +139,14 @@ class MyApp(App):
             new_fl.add_widget(
                 Button( text='Выйти',
                     size_hint=(0.5, 0.2), pos_hint={'x':.5, 'y':.0},
-                    on_press= btn_exit_moadl_view_pressed, font_size = 24
+                    on_press= btn_exit_moadl_view_pressed, font_size = 45
                 )
             )
 
             new_fl.add_widget(
                 Button(text='удалить',
                        size_hint=(.5, .2), pos_hint={'x': .0, 'y': .0},
-                       on_press=deleting, font_size = 24
+                       on_press=deleting, font_size = 45
                        )
             )
 
@@ -178,7 +178,7 @@ class MyApp(App):
 
         def btn1_pressed(instance):
             self.textinput = TextInput(text='Название продукта-Дата',
-                                       multiline=True, focus=False , font_size = 30)
+                                       multiline=False, focus=False , font_size = 30)
 
             bl.clear_widgets()
             bl.add_widget(self.textinput)
@@ -189,7 +189,7 @@ class MyApp(App):
             global s
 
             bl.clear_widgets()
-            gl = GridLayout(cols=2, size_hint_y=None, spacing=5)
+            gl = GridLayout(cols=2, size_hint_y=None, spacing=5, row_default_height = 200)
             gl.bind(minimum_height=gl.setter('height'))
             scrollBar = ScrollView(size_hint=(1, 1), size=(Window.width, Window.height))
             scrollBar.add_widget(gl)
@@ -203,29 +203,31 @@ class MyApp(App):
                     a[0] = a[0].split('.')
                     s.append(a)
                 my_file.close()
+                print(s)
 
                 s.sort(key=lambda list: int(list[0][2][-2:] + list[0][1] + list[0][0]))
                 self.product_list = s
+                print(s)
 
                 idintif = 0
                 for k in s:
-                    lb = Label( text=k[1][:-1], font_size = 30, size_hint_y=None )
+                    lb = Label( text=k[1][:-1], font_size = 60, size_hint_y=None, height = 200)
                     CustomGraphics.SetBG(lb, bg_color=[layout_color[0], layout_color[1], layout_color[2], layout_color[3]])
                     gl.add_widget(lb)
 
-                    al = AnchorLayout(anchor_x='right', anchor_y='top', size_hint_y=None)
-                    al.add_widget(Label( text=k[0][0] + '.' + k[0][1] + '.' + k[0][2], font_size = 30 ))
+                    al = AnchorLayout(anchor_x='right', anchor_y='top', size_hint_y=None, height = 200)
+                    al.add_widget(Label( text=k[0][0] + '.' + k[0][1] + '.' + k[0][2], font_size = 60 ))
                     al.add_widget(
                         Button(
-                            text='X' + '[' + str(idintif) + ']', font_size=26,
+                            text='X' + '[' + str(idintif) + ']', font_size=40,
                             on_press=btn_delete_pressed,
-                            size_hint=(None, 0.45), pos_hint={'x':.8, 'y':.6},
-                            size=[65, 0], background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]),
-                            opacity = 20
+                            size_hint=(None, None), pos_hint={'x':.8, 'y':.8},
+                            size=[75, 75], background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]),
+                            opacity = 50, background_normal = ''
                         )
                     )
                     idintif += 1
-                    CustomGraphics.SetBG(al, bg_color=[layout_color[0], layout_color[1], layout_color[2], layout_color[3]])
+                    CustomGraphics.SetBG(al, bg_color=[layout_color[0], layout_color[1], layout_color[2], layout_color[3]], background_normal = '')
                     gl.add_widget(al)
 
             except FileNotFoundError:
@@ -238,13 +240,13 @@ class MyApp(App):
         big_al = AnchorLayout(anchor_x='center', anchor_y='center', )
         fl_al = FloatLayout(size_hint=(1, .3))
 
-        btn1 = Button(text='Добавить Продукт', font_size = 30, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
-        btn2 = Button(text='Расписание порчи продуктов', font_size = 30, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
+        btn1 = Button(text='Добавить Продукт', font_size = 60, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), background_normal = '')
+        btn2 = Button(text='Расписание порчи продуктов', font_size = 60, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), background_normal = '')
 
-        btn_exit = Button(text='Выйти', font_size = 30, size_hint=(1, .3), background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
-        btn_add = Button(text='Добавить', font_size = 30, size_hint=(1, .3), background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]))
+        btn_exit = Button(text='Выйти', font_size = 60, size_hint=(1, .3), background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), background_normal = '')
+        btn_add = Button(text='Добавить', font_size = 60, size_hint=(1, .3), background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), background_normal = '')
 
-        btn_settings = Button( text='Настройки', font_size = 30, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), on_press=btn_settings_pressed, size_hint=(0.3, 1), pos_hint={'x':.0, 'y':.0} )
+        btn_settings = Button( text='Настройки', font_size = 60, background_color=(btn_color[0], btn_color[1], btn_color[2], btn_color[3]), background_normal = '' , on_press=btn_settings_pressed, size_hint=(0.5, 1), pos_hint={'x':.0, 'y':.0} )
 
         Window.clearcolor =(window_color[0], window_color[1], window_color[2], window_color[3])
 
