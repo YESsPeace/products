@@ -55,9 +55,9 @@ class MyApp(App):
             color_list = open('color_settings.txt', 'a+')
 
             color_list.write('default_color_day:' + '\n')
-            color_list.write('    btn: .243137255, .478431373, .807843137, 1' + '\n')
-            color_list.write('    window: .2, .2, .2, .2' + '\n')
-            color_list.write('    layout: .443137255, .854901961, .6, 1' + '\n')
+            color_list.write('    btn: .47058823529, .2862745098, .42745098039, 1' + '\n')
+            color_list.write('    window: .2, .2, .2, 1' + '\n')
+            color_list.write('    layout: .72156862745, .53725490196, .67843137255, 1' + '\n')
 
             color_list.write('$default_color_night:' + '\n')
             color_list.write('    btn:' + '\n')
