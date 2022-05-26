@@ -166,19 +166,26 @@ class MyApp(App):
             bl.add_widget(btn2)
 
         def adding(instance):
-            a = self.textinput.text.split('-')
+            print(self.textinput.text)
+            print(self.textinput.text.split())
+            a = self.textinput.text.split()
 
             my_file = open('files.txt', 'a+')
-            my_file.write(a[1])
+            my_file.write(a[-1])
             my_file.write('$')
-            my_file.write(a[0])
+            a_to_write_name = ''
+
+            for i in range(len(a) -1):
+                a_to_write_name += str(a[i]) + ' '
+
+            my_file.write(a_to_write_name)
             my_file.write('\n')
 
             my_file.close()
 
         def btn1_pressed(instance):
-            self.textinput = TextInput(text='Название продукта-Дата',
-                                       multiline=False, focus=False , font_size = 30)
+            self.textinput = TextInput(text='Впишите название продукта и дату через пробел',
+                                       multiline=True, focus=False , font_size = 40)
 
             bl.clear_widgets()
             bl.add_widget(self.textinput)
@@ -200,14 +207,25 @@ class MyApp(App):
 
                 for line in my_file:
                     a = line.split('$')
-                    a[0] = a[0].split('.')
-                    s.append(a)
+
+                    count_dut = 0
+                    for h in range(len(a[0])):
+                        if a[0][h] == '.': count_dut += 1
+                    if not count_dut == 0:
+                        a[0] = a[0].split('.')
+                        s.append(a)
                 my_file.close()
                 print(s)
 
                 s.sort(key=lambda list: int(list[0][2][-2:] + list[0][1] + list[0][0]))
                 self.product_list = s
                 print(s)
+
+                if s == []:
+                    bl.add_widget(Label(text='Извините, файл создан, но пуст.'))
+                    bl.add_widget(btn_exit)
+                    return
+
 
                 idintif = 0
                 for k in s:
